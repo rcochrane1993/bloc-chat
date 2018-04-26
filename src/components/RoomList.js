@@ -3,8 +3,11 @@ import React, { Component } from 'react';
 class RoomList extends Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this)
+    this.createRoom = this.createRoom.bind(this)
     this.state = {
-      rooms: []
+      rooms: [],
+      newRoomName: ""
     };
     this.roomsRef = this.props.firebase.database().ref('rooms');
   }
@@ -16,20 +19,34 @@ class RoomList extends Component {
        const room = snapshot.val();
        room.key = snapshot.key;
        this.setState({ rooms: this.state.rooms.concat( room ) });
-       console.log(snapshot)
      });
+   }
+
+   createRoom(e){
+     e.preventDefault();
+     console.log("create room")
+     this.roomsRef.push({
+       name: this.state.newRoomName
+     });
+   }
+
+   handleChange(e){
+     this.setState({newRoomName: e.target.value})
    }
 
   render() {
     return (
       <section className='RoomList'>
         {
-          this.state.rooms.map((room, index) => { return (
+          this.state.rooms.map((room, index) =>
         <ul className="chat-room-list" key={index} >
           <li>{room.name}</li>
-        </ul>)}
-          )
+        </ul>)
         }
+        <form onSubmit={this.createRoom}>
+          <input type="text" onChange={this.handleChange} value={this.state.newRoomName} />
+          <input type="submit"/>
+        </form>
 
       </section>
     )
