@@ -13,11 +13,15 @@ class messageList extends Component {
      this.messagesRef.on('child_added', snapshot => {
        const message = snapshot.val();
        message.key = snapshot.key;
+       message.username= snapshot.username;
+       message.content=snapshot.content;
+       message.sentAt= this.props.firebase.database.ServerValue.TIMESTAMP;
+       message.roomId= snapshot.roomId;
        this.setState({ messages: this.state.messages.concat( message ) });
      });
    }}
 
-  render(){
+  render() {
     return (
       <section className='MessageList' >
       </section>

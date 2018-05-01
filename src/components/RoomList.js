@@ -24,7 +24,6 @@ class RoomList extends Component {
 
    createRoom(e){
      e.preventDefault();
-     console.log("create room")
      this.roomsRef.push({
        name: this.state.newRoomName
      });
@@ -39,7 +38,7 @@ class RoomList extends Component {
       <section className='RoomList'>
         {
           this.state.rooms.map((room, index) =>
-        <ul className="chat-room-list" key={index} >
+        <ul className="chat-room-list" key={index} onClick={this.props.selectRoom} >
           <li>{room.name}</li>
         </ul>)
         }

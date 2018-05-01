@@ -42,6 +42,7 @@ class App extends Component {
           <messageList
             firebase={firebase}
             selectRoom={(e) => this.selectRoom(e)}
+            activeRoom={this.state.activeRoom}
           />
         </body>
       </div>
