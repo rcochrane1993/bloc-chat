@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class messageList extends Component {
+class MessageList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,7 +15,7 @@ class messageList extends Component {
             message.key = snapshot.key;
             message.username = snapshot.username;
             message.content = snapshot.content;
-            message.sentAt = this.props.firebase.database.ServerValue.TIMESTAMP;
+            message.sentAt = snapshot.sentAt;
             message.roomId = snapshot.roomId;
             this.setState({
                 messages: this.state.messages.concat(message)
@@ -33,19 +33,18 @@ class messageList extends Component {
             <col id ="content-column"/>
           </colgroup>
           <tbody>
-            { this.props.activeRoom === message.roomId ?
-              this.state.messages.map((message,index) =>
-              <tr className="message-data" >
+            { this.state.messages.map((message,index) =>
+              <tr className="message-data" key={index}>
                 <td className="username">{message.username}</td>
                 <td className="time-sent">{message.sentAt}</td>
-                <td classname="content">{message.content}</td>
+                <td className="content">{message.content}</td>
               </tr>
-            ) : console.log('nothing')
+             )
           }
           </tbody>
         </table>
-      </section>
+      </section>);
     }
 }
 
-export default messageList;
+export default MessageList;
