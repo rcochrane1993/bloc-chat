@@ -26,6 +26,7 @@ class MessageList extends Component {
         return (
       <section className='MessageList' >
         <table id="messages-sent">
+          <thead>{this.props.activeRoom.name}</thead>
           <colgroup>
             <col id ="username-column"/>
             <col id ="time-sent-column"/>
