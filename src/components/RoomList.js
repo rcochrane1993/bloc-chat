@@ -30,7 +30,7 @@ class RoomList extends Component {
    }
 
    handleChange(e){
-     this.setState({newRoomName: e.target.value})
+     this.setState({newRoomName: e.target})
    }
 
   render() {
@@ -38,8 +38,8 @@ class RoomList extends Component {
       <section className='RoomList'>
         {
           this.state.rooms.map((room, index) =>
-        <ul className="chat-room-list" key={index} onClick={this.props.selectRoom} >
-          <li>{room.name}</li>
+        <ul className="chat-room-list" key={index} >
+          <li onClick={() => this.props.selectRoom(room)}>{room.name}</li>
         </ul>)
         }
         <form onSubmit={this.createRoom}>

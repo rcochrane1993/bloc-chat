@@ -19,18 +19,27 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeRoom: "room 4"
+            activeRoom: ""
         }
     }
 
-    selectRoom(e) {
+
+    selectRoom(room) {
         this.setState({
-            activeRoom: e.target.value
+            activeRoom: room
         })
     }
     render() {
         return (
         <section>
+          <div id='message-list'>
+            <MessageList
+              firebase={firebase}
+              selectRoom={(e) => this.selectRoom(e)}
+              activeRoom={this.state.activeRoom.key}
+              activeRoomName={this.state.activeRoom.name}
+            />
+          </div>
           <aside>
             <h1>Bloc Chat</h1>
             <section>
@@ -41,13 +50,7 @@ class App extends Component {
               />
             </section>
           </aside>
-            <div id='message-list'>
-              <MessageList
-                firebase={firebase}
-                selectRoom={(e) => this.selectRoom(e)}
-                activeRoom={this.state.activeRoom}
-              />
-            </div>
+
         </section>
         );
     }

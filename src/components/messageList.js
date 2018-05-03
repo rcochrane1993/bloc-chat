@@ -6,16 +6,13 @@ class MessageList extends Component {
         this.state = {
             messages: []
         }
-        this.messagesRef = this.props.firebase.database().ref('messages') //not sure what to reference here
-    }
+        this.messagesRef = this.props.firebase.database().ref('messages')
+      }
+
     componentDidMount() {
         this.messagesRef.on('child_added', snapshot => {
             const message = snapshot.val();
             message.key = snapshot.key;
-            message.username = snapshot.username;
-            message.content = snapshot.content;
-            message.sentAt = snapshot.sentAt;
-            message.roomId = snapshot.roomId;
             this.setState({
                 messages: this.state.messages.concat(message)
             });
@@ -26,7 +23,11 @@ class MessageList extends Component {
         return (
       <section className='MessageList' >
         <table id="messages-sent">
-          <thead>{this.props.activeRoom.name}</thead>
+          <thead>
+            <tr>
+              <th>{this.props.activeRoomName}</th>
+            </tr>
+          </thead>
           <colgroup>
             <col id ="username-column"/>
             <col id ="time-sent-column"/>
@@ -34,12 +35,13 @@ class MessageList extends Component {
           </colgroup>
           <tbody>
             { this.state.messages.map((message,index) =>
+              message.roomId === this.props.activeRoom &&
               <tr className="message-data" key={index}>
                 <td className="username">{message.username}</td>
                 <td className="time-sent">{message.sentAt}</td>
                 <td className="content">{message.content}</td>
               </tr>
-             )
+            )
           }
           </tbody>
         </table>
