@@ -20,16 +20,22 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeRoom: ""
+            activeRoom: "",
+            user: []
         }
     }
 
+setUser(user){
+  this.setState({user: user })
+  console.log(user)
+}
 
     selectRoom(room) {
         this.setState({
             activeRoom: room
         })
     }
+
     render() {
         return (
         <section>
@@ -53,6 +59,8 @@ class App extends Component {
             <div>
               <User
                 firebase={firebase}
+                setUser={(input) => this.setUser(input)}
+                user={this.state.user}
               />
             </div>
           </aside>
