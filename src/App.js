@@ -27,7 +27,7 @@ class App extends Component {
 
 setUser(user){
   this.setState({user: user })
-  console.log(user)
+
 }
 
     selectRoom(room) {
@@ -45,6 +45,7 @@ setUser(user){
               selectRoom={(e) => this.selectRoom(e)}
               activeRoom={this.state.activeRoom.key}
               activeRoomName={this.state.activeRoom.name}
+              user={this.state.user}
             />
           </div>
           <aside>

@@ -3,8 +3,13 @@ import React, {Component} from 'react';
 class MessageList extends Component {
     constructor(props) {
         super(props);
+        this.createMessage = this.createMessage.bind(this);
+        this.handleMsgCreation= this.handleMsgCreation.bind(this);
         this.state = {
-            messages: []
+            messages: [],
+            newMsgCont: "",
+            newMsgSentAt: "",
+            newMsgUsr: "",
         }
         this.messagesRef = this.props.firebase.database().ref('messages')
       }
@@ -19,7 +24,26 @@ class MessageList extends Component {
         });
     }
 
+    createMessage(e){
+      e.preventDefault();
+      this.messagesRef.push({
+        content: this.state.newMsgCont,
+        sentAt: this.state.newMsgSentAt,
+        username: this.state.newMsgUsr,
+        roomId: this.props.activeRoom
+      });
+    }
+
+    handleMsgCreation(e) {
+      this.setState({
+        newMsgCont: e.target.value,
+        newMsgUsr: this.props.user === [] ? "guest" : this.props.user.displayName,
+        newMsgSentAt: "timestamp"
+      })
+    }
+
     render() {
+      console.log(this.props.activeRoom)
         return (
       <section className='MessageList' >
         <table id="messages-sent">
@@ -41,10 +65,15 @@ class MessageList extends Component {
                 <td className="time-sent">{message.sentAt}</td>
                 <td className="content">{message.content}</td>
               </tr>
+
             )
           }
           </tbody>
         </table>
+        <form onSubmit={this.createMessage}>
+          <input type="text" onChange={this.handleMsgCreation} value={this.state.newMsgCont} />
+          <input type="submit"/>
+        </form>
       </section>);
     }
 }
