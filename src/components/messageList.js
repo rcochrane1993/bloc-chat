@@ -5,13 +5,16 @@ class MessageList extends Component {
         super(props);
         this.createMessage = this.createMessage.bind(this);
         this.handleMsgCreation= this.handleMsgCreation.bind(this);
+        this.convertTimestamp= this.convertTimestamp.bind(this);
         this.state = {
             messages: [],
             newMsgCont: "",
+            newMsgRmId: this.props.activeRoom,
             newMsgSentAt: "",
             newMsgUsr: "",
         }
-        this.messagesRef = this.props.firebase.database().ref('messages')
+        this.messagesRef = this.props.firebase.database().ref('messages');
+
       }
 
     componentDidMount() {
@@ -24,13 +27,29 @@ class MessageList extends Component {
         });
     }
 
+    convertTimestamp(timestamp) {
+    const d = timestamp
+		const yyyy = d.getFullYear();
+		const mm = ('0' + (d.getMonth() + 1)).slice(-2);	// Months are zero based. Add leading 0.
+		const dd = ('0' + d.getDate()).slice(-2);		// Add leading 0.
+		const hh = d.getHours();
+		const h = hh !== 0 ? hh : 12
+		const min = ('0' + d.getMinutes()).slice(-2);// Add leading 0.
+		const ampm = hh >= 12 ? 'PM' : 'AM'
+
+
+	// ie: 2013-02-18, 8:35 AM
+	const time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min + ' ' + ampm;
+
+	return time;
+}
     createMessage(e){
       e.preventDefault();
       this.messagesRef.push({
         content: this.state.newMsgCont,
         sentAt: this.state.newMsgSentAt,
         username: this.state.newMsgUsr,
-        roomId: this.props.activeRoom
+        roomId: this.state.newMsgRmId
       });
     }
 
@@ -38,12 +57,11 @@ class MessageList extends Component {
       this.setState({
         newMsgCont: e.target.value,
         newMsgUsr: this.props.user === [] ? "guest" : this.props.user.displayName,
-        newMsgSentAt: "timestamp"
+        newMsgSentAt: this.convertTimestamp(this.props.firebase.database.ServerValue.TIMESTAMP)
       })
     }
 
     render() {
-      console.log(this.props.activeRoom)
         return (
       <section className='MessageList' >
         <table id="messages-sent">
