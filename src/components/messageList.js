@@ -9,13 +9,13 @@ class MessageList extends Component {
         this.state = {
             messages: [],
             newMsgCont: "",
-            newMsgRmId: this.props.activeRoom,
             newMsgSentAt: "",
             newMsgUsr: "",
         }
-        this.messagesRef = this.props.firebase.database().ref('messages');
-
+        this.messagesRef = this.props.firebase.database().ref('messages')
       }
+
+
 
     componentDidMount() {
         this.messagesRef.on('child_added', snapshot => {
@@ -27,29 +27,13 @@ class MessageList extends Component {
         });
     }
 
-    convertTimestamp(timestamp) {
-    const d = timestamp
-		const yyyy = d.getFullYear();
-		const mm = ('0' + (d.getMonth() + 1)).slice(-2);	// Months are zero based. Add leading 0.
-		const dd = ('0' + d.getDate()).slice(-2);		// Add leading 0.
-		const hh = d.getHours();
-		const h = hh !== 0 ? hh : 12
-		const min = ('0' + d.getMinutes()).slice(-2);// Add leading 0.
-		const ampm = hh >= 12 ? 'PM' : 'AM'
-
-
-	// ie: 2013-02-18, 8:35 AM
-	const time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min + ' ' + ampm;
-
-	return time;
-}
     createMessage(e){
       e.preventDefault();
       this.messagesRef.push({
         content: this.state.newMsgCont,
         sentAt: this.state.newMsgSentAt,
         username: this.state.newMsgUsr,
-        roomId: this.state.newMsgRmId
+        roomId: this.props.activeRoom
       });
     }
 
@@ -57,12 +41,31 @@ class MessageList extends Component {
       this.setState({
         newMsgCont: e.target.value,
         newMsgUsr: this.props.user === [] ? "guest" : this.props.user.displayName,
-        newMsgSentAt: this.convertTimestamp(this.props.firebase.database.ServerValue.TIMESTAMP)
+        newMsgSentAt: this.props.firebase.database.ServerValue.TIMESTAMP
       })
     }
 
+    convertTimestamp(timestamp) {
+      if (timestamp === undefined) {return;}
+      const d = new Date(timestamp),
+		    yyyy = d.getFullYear(),
+		      mm = ('0' + (d.getMonth() + 1)).slice(-2),	// Months are zero based. Add leading 0.
+		      dd = ('0' + d.getDate()).slice(-2),		// Add leading 0.
+		      hh = d.getHours(),
+		      h = hh !== 0 ? hh % 12 : 12,
+		      min = ('0' + d.getMinutes()).slice(-2),// Add leading 0.
+		      ampm = hh >= 12 ? 'PM' : 'AM',
+
+
+	// ie: 2013-02-18, 8:35 AM
+	      time = yyyy + '-' + mm + '-' + dd + ', ' + h + ':' + min + ' ' + ampm;
+
+	return time;
+}
+
     render() {
         return (
+
       <section className='MessageList' >
         <table id="messages-sent">
           <thead>
@@ -80,7 +83,7 @@ class MessageList extends Component {
               message.roomId === this.props.activeRoom &&
               <tr className="message-data" key={index}>
                 <td className="username">{message.username}</td>
-                <td className="time-sent">{message.sentAt}</td>
+                <td className="time-sent">{this.convertTimestamp(message.sentAt)}</td>
                 <td className="content">{message.content}</td>
               </tr>
 
