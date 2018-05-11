@@ -30,7 +30,7 @@ class RoomList extends Component {
    }
 
    handleChange(e){
-     this.setState({newRoomName: e.target})
+     this.setState({newRoomName: e.target.value})
    }
 
   render() {
