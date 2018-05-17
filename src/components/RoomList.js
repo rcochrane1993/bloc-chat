@@ -5,6 +5,7 @@ class RoomList extends Component {
     super(props);
     this.handleChange = this.handleChange.bind(this)
     this.createRoom = this.createRoom.bind(this)
+    this.deleteRoom= this.deleteRoom.bind(this)
     this.state = {
       rooms: [],
       newRoomName: ""
@@ -29,6 +30,10 @@ class RoomList extends Component {
      });
    }
 
+   deleteRoom(room){
+     console.log(room)
+   }
+
    handleChange(e){
      this.setState({newRoomName: e.target.value})
    }
@@ -39,12 +44,15 @@ class RoomList extends Component {
         {
           this.state.rooms.map((room, index) =>
         <ul className="chat-room-list" key={index} >
-          <li onClick={() => this.props.selectRoom(room)}>{room.name}</li>
+          <li onClick={() => this.props.selectRoom(room)}>{room.name}
+            <button onClick={() => this.deleteRoom(room)}> Delete Room</button>
+          </li>
         </ul>)
         }
         <form onSubmit={this.createRoom}>
           <input type="text" onChange={this.handleChange} value={this.state.newRoomName} />
-          <input type="submit"/>
+          <button input type='submit'>Create Room</button>
+          <button>Delete Room</button>
         </form>
 
       </section>
