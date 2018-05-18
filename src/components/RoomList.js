@@ -31,7 +31,7 @@ class RoomList extends Component {
    }
 
    deleteRoom(room){
-     console.log(room)
+     this.roomsRef.splice(room, 1)
    }
 
    handleChange(e){
@@ -45,14 +45,13 @@ class RoomList extends Component {
           this.state.rooms.map((room, index) =>
         <ul className="chat-room-list" key={index} >
           <li onClick={() => this.props.selectRoom(room)}>{room.name}
-            <button onClick={() => this.deleteRoom(room)}> Delete Room</button>
+            <button onClick={() => this.deleteRoom(room.index)}> Delete </button>
           </li>
         </ul>)
         }
         <form onSubmit={this.createRoom}>
           <input type="text" onChange={this.handleChange} value={this.state.newRoomName} />
-          <button input type='submit'>Create Room</button>
-          <button>Delete Room</button>
+          <input type="submit"/>
         </form>
 
       </section>
